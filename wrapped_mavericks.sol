@@ -12,13 +12,14 @@ contract WrappedMavericks is ERC721Upgradeable, OwnableUpgradeable {
 
     address public immutable ORIGINAL_MAVERICK_CONTRACT;
     string public baseURI = "ipfs://QmNpw6kYTQNfU7LTsbj4zrFfCN8Ck4m1reUdNE63VBiNj2/";   
-    uint256 public royaltyBasis = 750;
+    uint256 public royaltyBasis;
 
     // Live adr for EVM contract: 0x7ddaa898d33d7ab252ea5f89f96717c47b2fee6e
     // _contractOwner should be the community multisig if available
-    constructor(address _maverickContract, address _contractOwner) {
+    constructor(address _maverickContract, address _contractOwner, uint256 _royaltyBasis) {
         ORIGINAL_MAVERICK_CONTRACT = _maverickContract;
         _transferOwnership(_contractOwner);
+        updateRoyalty(_royaltyBasis);
     }
 
     // wrap 1 EVM, give the corresponding wEVM
@@ -46,10 +47,10 @@ contract WrappedMavericks is ERC721Upgradeable, OwnableUpgradeable {
     }
 
     // upgrade royalty info
-    function upgradeRoyalty(uint256 _newRoyalty) public onlyOwner() {
-        require(_newRoyalty < 750, "Wrapped Mavericks: royalty should be at or below 7.5%");
+    function updateRoyalty(uint256 _royaltyBasis) public onlyOwner() {
+        require(_royaltyBasis < 750, "Wrapped Mavericks: royalty should be at or below 7.5%");
 
-        royaltyBasis = _newRoyalty;
+        royaltyBasis = _royaltyBasis;
     }
 
     // transfers contract balance to owner

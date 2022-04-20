@@ -40,7 +40,7 @@ contract WrappedMavericks is ERC721Upgradeable, OwnableUpgradeable {
     }
 
     // returns royalty info for marketplaces
-    // compiler warning is normal, this is an underlying flaw of the EIP2981 standard
+    // compiler warning is normal, in order to respect the EIP2981 standard
     function royaltyInfo(uint256 _tokenId, uint256 _salePrice) external view returns (address receiver, uint256 royaltyAmount) {
         receiver = address(this);
         royaltyAmount = _salePrice * royaltyBasis / 10000;

@@ -11,7 +11,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 contract WrappedMavericks is ERC721Upgradeable, OwnableUpgradeable {
 
     address public immutable ORIGINAL_MAVERICK_CONTRACT;
-    string public baseURI = "ipfs://QmNpw6kYTQNfU7LTsbj4zrFfCN8Ck4m1reUdNE63VBiNj2/";   
+    string public constant baseURI = "ipfs://QmNpw6kYTQNfU7LTsbj4zrFfCN8Ck4m1reUdNE63VBiNj2/";   
     uint256 public royaltyBasis;
 
     // Live adr for EVM contract: 0x7ddaa898d33d7ab252ea5f89f96717c47b2fee6e
@@ -31,6 +31,8 @@ contract WrappedMavericks is ERC721Upgradeable, OwnableUpgradeable {
 
     // unwrap a wEVM, give the corresponding EVM
     function unwrapLion(uint256 _id) public {
+        require(ownerOf(_id) == msg.sender, "Wrapped Mavericks: to unwrap the lion, one must own the lion");
+
         _burn(_id);
         IERC721Upgradeable(ORIGINAL_MAVERICK_CONTRACT).transferFrom(address(this), msg.sender, _id);
     }
@@ -47,7 +49,7 @@ contract WrappedMavericks is ERC721Upgradeable, OwnableUpgradeable {
         royaltyAmount = _salePrice * royaltyBasis / 10000;
     }
 
-    // upgrade royalty info
+    // update royalty info
     function updateRoyalty(uint256 _royaltyBasis) public onlyOwner() {
         require(_royaltyBasis < 750, "Wrapped Mavericks: royalty should be at or below 7.5%");
 

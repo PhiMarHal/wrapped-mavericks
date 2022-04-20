@@ -16,7 +16,7 @@ contract WrappedMavericks is ERC721Upgradeable, OwnableUpgradeable {
 
     // Live adr for EVM contract: 0x7ddaa898d33d7ab252ea5f89f96717c47b2fee6e
     // _contractOwner should be the community multisig if available
-	// _royaltyBasis is in basis points, with a max of 750 = 7.5%
+    // _royaltyBasis is in basis points, with a max of 750 = 7.5%
     constructor(address _maverickContract, address _contractOwner, uint256 _royaltyBasis) {
         ORIGINAL_MAVERICK_CONTRACT = _maverickContract;
         _transferOwnership(_contractOwner);

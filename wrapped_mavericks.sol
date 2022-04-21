@@ -11,16 +11,19 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 contract WrappedMavericks is ERC721Upgradeable, OwnableUpgradeable {
 
     address public immutable ORIGINAL_MAVERICK_CONTRACT;
-    string public constant baseURI = "ipfs://QmNpw6kYTQNfU7LTsbj4zrFfCN8Ck4m1reUdNE63VBiNj2/";   
+    string public baseURI;
     uint256 public royaltyBasis;
 
     // Live adr for EVM contract: 0x7ddaa898d33d7ab252ea5f89f96717c47b2fee6e
-    // _contractOwner should be the community multisig if available
+    // _contractOwner should be the community multisig: 0x29816F59f1c7E1ba69289cf486556929F7743cA2
     // _royaltyBasis is in basis points, with a max of 750 = 7.5%
-    constructor(address _maverickContract, address _contractOwner, uint256 _royaltyBasis) {
+    // _baseURI should be an ipfs link in this format: "ipfs://xxx/"
+    // _baseURI should point to the metadata fixed by the community
+    constructor(address _maverickContract, address _contractOwner, uint256 _royaltyBasis, string memory _setBaseURI) {
         ORIGINAL_MAVERICK_CONTRACT = _maverickContract;
         _transferOwnership(_contractOwner);
         updateRoyalty(_royaltyBasis);
+        baseURI = _setBaseURI;
     }
 
     // wrap 1 EVM, give the corresponding wEVM
